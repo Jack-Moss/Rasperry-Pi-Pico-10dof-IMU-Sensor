@@ -3,8 +3,6 @@ from constants import *
 import time
 import math
 
-Accel = [0, 0, 0]
-
 
 def ratio_to_ms(value):
     # g = 9.81
@@ -30,28 +28,29 @@ class ICM20948(object):
                          REG_VAL_BIT_ACCEL_DLPCFG_6 | REG_VAL_BIT_ACCEL_FS_16g | REG_VAL_BIT_ACCEL_DLPF)
         # user bank 0 register
         self._write_byte(REG_ADD_REG_BANK_SEL, REG_VAL_REG_BANK_0)
+        self.Accel = [0, 0, 0]
         time.sleep(0.1)
 
-    def icm20948_accel_read(self):
+    def accel_read(self):
         self._write_byte(REG_ADD_REG_BANK_SEL, REG_VAL_REG_BANK_0)
         data = self._read_block(REG_ADD_ACCEL_XOUT_H, 12)
         self._write_byte(REG_ADD_REG_BANK_SEL, REG_VAL_REG_BANK_2)
-        Accel[0] = (data[0] << 8) | data[1]
-        Accel[1] = (data[2] << 8) | data[3]
-        Accel[2] = (data[4] << 8) | data[5]
-        if Accel[0] >= 32767:  # deal with the overflow issues
-            Accel[0] = Accel[0] - 65535
-        elif Accel[0] <= -32767:
-            Accel[0] = Accel[0] + 65535
-        if Accel[1] >= 32767:
-            Accel[1] = Accel[1] - 65535
-        elif Accel[1] <= -32767:
-            Accel[1] = Accel[1] + 65535
-        if Accel[2] >= 32767:
-            Accel[2] = Accel[2] - 65535
-        elif Accel[2] <= -32767:
-            Accel[2] = Accel[2] + 65535
-        total_acceleration = math.sqrt(Accel[0] ** 2 + Accel[1] ** 2 + Accel[2] ** 2)
+        self.Accel[0] = (data[0] << 8) | data[1]
+        self.Accel[1] = (data[2] << 8) | data[3]
+        self.Accel[2] = (data[4] << 8) | data[5]
+        if self.Accel[0] >= 32767:  # deal with the overflow issues
+            self.Accel[0] = self.Accel[0] - 65535
+        elif self.Accel[0] <= -32767:
+            self.Accel[0] = self.Accel[0] + 65535
+        if self.Accel[1] >= 32767:
+            self.Accel[1] = self.Accel[1] - 65535
+        elif self.Accel[1] <= -32767:
+            self.Accel[1] = self.Accel[1] + 65535
+        if self.Accel[2] >= 32767:
+            self.Accel[2] = self.Accel[2] - 65535
+        elif self.Accel[2] <= -32767:
+            self.Accel[2] = self.Accel[2] + 65535
+        total_acceleration = math.sqrt(self.Accel[0] ** 2 + self.Accel[1] ** 2 + self.Accel[2] ** 2)
         return ratio_to_ms(total_acceleration)
 
     def _read_byte(self, cmd):

@@ -1,6 +1,6 @@
-from Icm29048 import *
 import collections
 import utime
+from I2C_Icm29048 import *
 import ujson
 import machine
 
@@ -19,7 +19,7 @@ class Buffer(object):
 
     def create_rolling_buffer(self):
         # Startup and light pin for led to show running
-        print("asdf")
+        print("Rolling Buffer initiated")
         led_25 = machine.Pin(25, machine.Pin.OUT)
         led_25.value(1)
         #
@@ -30,10 +30,9 @@ class Buffer(object):
             self.remove_from_buffer()
             self.add_new_values()
             self.add_to_buffer(self.icm20948.Accel[0], self.icm20948.Accel[1], self.icm20948.Accel[2])
-            #TODO ADD DETECTION HERE
+            # TODO ADD DETECTION HERE
             break
         led_25.value(0)
-
 
     def add_to_buffer(self, x, y, z):
         self.buffer.append((x, y, z))
@@ -42,19 +41,15 @@ class Buffer(object):
         self.buffer.popleft()
 
     def add_new_values(self):
-        self.icm20948.icm20948_gyro_accel_read()
-        self.icm20948.icm20948calculate_avg_value()
-        self.icm20948.imu_ahrs_update()
-        self.icm20948.calculate_pitch_roll_yaw()
+        self.icm20948.accel_read()
         utime.sleep_ms(self.check_speed)
 
     def detect_fall(self):
         pass
 
-
     def dump_buffer_to_file(self):
         print("here")
-        #dump_list = {"Fall Count": self.fall_count, "fall_data": []}
+        # dump_list = {"Fall Count": self.fall_count, "fall_data": []}
         while len(self.buffer) > 0:
             print(self.buffer.popleft())
         #    dump_list["fall_data"].append(self.buffer.popleft())
