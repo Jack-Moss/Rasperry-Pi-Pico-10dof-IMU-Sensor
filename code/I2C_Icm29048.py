@@ -1,5 +1,5 @@
 from machine import I2C
-from constants import *
+from code.constants import *
 import time
 import math
 

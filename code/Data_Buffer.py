@@ -1,7 +1,6 @@
 import collections
 import utime
-from I2C_Icm29048 import *
-import ujson
+from code.I2C_Icm29048 import *
 import machine
 
 
