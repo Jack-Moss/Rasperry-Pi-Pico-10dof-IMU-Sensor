@@ -1,3 +1,2 @@
 # PiPicoProject
-Location of the Pi Pico Project,
-All of the code is in the Code Directory
+This project is essencially to turn a Pi Pico and a 10dofIMU into a fall detection system. 
