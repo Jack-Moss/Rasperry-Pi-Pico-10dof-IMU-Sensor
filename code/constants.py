@@ -1,4 +1,4 @@
-# define ICM-20948 Device I2C address
+# define ICM-20948 Device i2c address
 I2C_ADD_ICM20948 = 0x68
 I2C_ADD_ICM20948_AK09916 = 0x0C
 I2C_ADD_ICM20948_AK09916_READ = 0x80
